@@ -1,0 +1,11 @@
+Changes
+MANIFEST
+Makefile.PL
+README
+README.html
+release-log.txt
+bin/file-similars
+lib/File/Find/Similars.pm
+test.pl
+test.tgz
+META.yml                                 Module meta-data (added by MakeMaker)
