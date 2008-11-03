@@ -1,7 +1,7 @@
 package File::Find::Similars;
 
 # @Author: Tong SUN, (c)2001-2008, all right reserved
-# @Version: $Date: 2008/11/02 01:24:55 $ $Revision: 2.0 $
+# @Version: $Date: 2008/11/03 14:19:45 $ $Revision: 2.4 $
 # @HomeURL: http://xpt.sourceforge.net/
 
 # {{{ LICENSE: 
@@ -38,8 +38,10 @@ File::Find::Similars - Fast similar-files finder
 
   use File::Find::Similars;
 
-  File::Find::Similars->init(0, \@ARGV);
-  similarity_check_name();
+  my $similars_finder = 
+      File::Find::Similars->new( { fc_level => $fc_level, } );
+  $similars_finder->find_for(\@ARGV);
+  $similars_finder->similarity_check();
 
 =head1 DESCRIPTION
 
@@ -62,115 +64,115 @@ would you expect from the outcome.
 
   $ make test
   PERL_DL_NONLAZY=1 /usr/bin/perl "-Iblib/lib" "-Iblib/arch" test.pl
-  1..4
+  1..5 todo 2;
   # Running under perl version 5.010000 for linux
-  # Current time local: Wed Oct 29 11:35:06 2008
-  # Current time GMT:   Wed Oct 29 15:35:06 2008
+  # Current time local: Mon Nov  3 08:57:42 2008
+  # Current time GMT:   Mon Nov  3 13:57:42 2008
   # Using Test.pm version 1.25
-  # Testing File::Find::Similars version 1.23
+  # Testing File::Find::Similars version 2.03
   
-  == Testing 1, files under test/ subdir:
+  . . .
+  
+  == Testing 2, files under test/ subdir:
   
     9 test/(eBook) GNU - Python Standard Library 2001.pdf
-    3 test/CardLayoutTest.java
+    3 test/Audio Book - The Grey Coloured Bunnie.mp3
+    5 test/ColoredGrayBunny.ogg
     5 test/GNU - 2001 - Python Standard Library.pdf
     4 test/GNU - Python Standard Library (2001).rar
     9 test/LayoutTest.java
     3 test/PopupTest.java
     2 test/Python Standard Library.zip
-    5 test/TestLayout.java
-  ok 1
+  ok 2 # (test.pl at line 83 TODO?!)
   
   Note:
   
-  - The fileSimilars.pl script will pick out similar files from them in next test.
+  - The file-similars script will pick out similar files from them in next test.
   - Let's assume that the number represent the file size in KB.
   
-  == Testing 2 result should be:
+  == Testing 3 result should be:
   
   ## =========
-             3 'CardLayoutTest.java' 'test/'
-             5 'TestLayout.java' 'test/'
+             3 'Audio Book - The Grey Coloured Bunnie.mp3' 'test/'
+             5 'ColoredGrayBunny.ogg'                      'test/'
   
   ## =========
-             4 'GNU - Python Standard Library (2001).rar' 'test/'
-             5 'GNU - 2001 - Python Standard Library.pdf' 'test/'
-  ok 2
-  
-  Note:
-  
-  - There are 2 groups of similar files picked out by the script.
-    The second group makes more sense.
-  - The similar files are picked because their file names looks similar.
-  - However, the file size plays an important role as well.
-  - There are 2 files in the second similar files group.
-  - The file 'Python Standard Library.zip' is not considered to be similar to
-    the group because its size is not similar to the group.
-  
-  == Testing 3, if Python.zip is bigger, result should be:
-  
-  ## =========
-             3 'CardLayoutTest.java' 'test/'
-             5 'TestLayout.java' 'test/'
-  
-  ## =========
-             4 'Python Standard Library.zip' 'test/'
              4 'GNU - Python Standard Library (2001).rar' 'test/'
              5 'GNU - 2001 - Python Standard Library.pdf' 'test/'
   ok 3
   
   Note:
   
-  - There are 3 files in the second similar files group.
-  - The file 'Python Standard Library.zip' is now in the 2nd similar files
-    group because its size is now similar to the group.
+  - There are 2 groups of similar files picked out by the script.
+  - The similar files are picked because their file names look similar.
+    Note that the first group looks different and spells differently too,
+    which means that the script is versatile enough to handle file names that
+    don't have space in it, and robust enough to deal with spelling mistakes.
+  - Apart from the file name, the file size plays an important role as well.
+  - There are 2 files in the second similar files group, the book files group.
+  - The file 'Python Standard Library.zip' is not considered to be similar to
+    the group because its size is not similar to the group.
   
-  == Testing 4, if Python.zip is even bigger, result should be:
+  == Testing 4, if Python.zip is bigger, result should be:
   
   ## =========
-             3 'CardLayoutTest.java' 'test/'
-             5 'TestLayout.java' 'test/'
+             4 'Python Standard Library.zip' 'test/'
+             4 'GNU - Python Standard Library (2001).rar' 'test/'
+             5 'GNU - 2001 - Python Standard Library.pdf' 'test/'
   
   ## =========
-             4 'GNU - Python Standard Library (2001).rar'       'test/'
-             5 'GNU - 2001 - Python Standard Library.pdf'       'test/'
-             6 'Python Standard Library.zip'                    'test/'
-             9 '(eBook) GNU - Python Standard Library 2001.pdf' 'test/'
+             3 'Audio Book - The Grey Coloured Bunnie.mp3' 'test/'
+             5 'ColoredGrayBunny.ogg'                      'test/'
   ok 4
   
   Note:
   
-  - There are 4 files in the second similar files group.
+  - The previous second similar files group is now the first. I.e.,
+    the order of similar files groups is not important.
+  - There are now 3 files in the book files group.
+  - The file 'Python Standard Library.zip' is included in the
+    group because its size is now similar to the group.
+  
+  == Testing 5, if Python.zip is even bigger, result should be:
+  
+  ## =========
+             4 'GNU - Python Standard Library (2001).rar' 'test/'
+             5 'GNU - 2001 - Python Standard Library.pdf' 'test/'
+             6 'Python Standard Library.zip' 'test/'
+             9 '(eBook) GNU - Python Standard Library 2001.pdf' 'test/'
+  
+  ## =========
+             3 'Audio Book - The Grey Coloured Bunnie.mp3' 'test/'
+             5 'ColoredGrayBunny.ogg'                      'test/'
+  ok 5
+  
+  Note:
+  
+  - There are 4 files in the book files group now.
   - The file 'Python Standard Library.zip' is still in the group.
   - But this time, because it is also considered to be similar to the .pdf
-    file (since their size are now similar, 6 vs 9), a 4th file the .pdf
-    is now included in the 2nd group.
+    file (since their size are now similar, 6 vs 9), a 4th file the .pdf one
+    is now included in the book group.
   - If the size of file 'Python Standard Library.zip' is 12(KB), then the
-    second similar files group will be split into two. Do you know why and
+    book files group will be split into two. Do you know why and
     which files each group will contain?
 
 The File::Find::Similars package comes with a fully functional demo
-script fileSimilars.pl. Please refer to its help file for further
+script file-similars. Please refer to its help file for further
 explanations.
 
-This package is highly customizable. Refer to hash variable %config and/or
-the 3 arrwash_ functions for customization hints.
+This package is highly customizable. Refer to the class method C<new> for
+details.
+
+=head1 DEPENDS
+
+This module depends on L<Text::Soundex>, but not L<File::Find>.
 
 =cut
 
 # }}}
 
-# {{{ global declaration:
-
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
-
-require Exporter;
-
-@ISA = qw(Exporter);
-
-@EXPORT = qw(
-&similarity_check_name	
-);
+# {{{ Global Declaration:
 
 # ============================================================== &us ===
 # ............................................................. Uses ...
@@ -183,30 +185,21 @@ use Getopt::Long;
 use File::Basename;
 use Text::Soundex;
 
+use base qw(Class::Accessor::Fast);
+
 # -- local modules
 
 sub dbg_show {};
 #use MyDbg; $MyDbg::debugging=010;
 
-# -- global variables
-use vars qw($progname $VERSION $verbose $debugging);
-
-# ============================================================== &cs ===
-# ................................................. Constant setting ...
-#
-$VERSION = sprintf("%d.%02d", q$Revision: 2.0 $ =~ /(\d+)\.(\d+)/);
-
-
 # ============================================================== &gv ===
 # .................................................. Global Varibles ...
 #
-use vars qw(%config @filequeue @fileInfo %sdxCnt %wrdLst);
 
-$config{WeightSoundex} = 50;	# precentage of weight that soundex takes,
-				# the rest is for file size
-$config{Threshold} = 75;	# over which files are considered similar
-$config{Deliminator} = "\n## =========\n";
-$config{Format} = "%12d '%s' %s'%s'";
+our @EXPORT = (  ); # may even omit this line
+
+use vars qw($progname $VERSION $debugging);
+use vars qw(%config @filequeue @fileInfo %sdxCnt %wrdLst);
 
 # @fileInfo: List of the following list:
 my (
@@ -216,25 +209,135 @@ my (
     $N_fSdxl,			# file soundex list, reference
     ) = (0..9);
 
-my $fc_level=0;
+# ============================================================== &cs ===
+# ................................................. Constant setting ...
+#
+$VERSION = sprintf("%d.%02d", q$Revision: 2.4 $ =~ /(\d+)\.(\d+)/);
 
 # }}}
-
-
-# Preloaded methods go here.
 
 # ############################################################## &ss ###
 # ................................................ Subroutions start ...
 
+=head1 METHODS
+
+=head2 File::Find::Similars->new(\%config_param)
+
+Initialize the object.
+
+  my $similars_finder = File::Find::Similars->new();
+
+or,
+
+  my $similars_finder = File::Find::Similars->new( {} );
+
+which are the same as:
+
+  my $similars_finder = File::Find::Similars->new( {
+     soundex_weight => 50,	# percentage of weight that soundex takes,
+     				# the rest is for file size
+     fc_threshold => 75,	# over which files are considered similar
+     delimiter => "\n## =========\n",	# delimiter between files output
+     format => "%12d '%s' %s'%s'", # file info print format
+     fc_level => 0, 		# file comparison level
+     verbose => 0,
+
+  } );
+
+What shown above are default settings. Any of the C<%config_param> attribute can be omitted when calling the new method.
+
+The C<new> is the only class method. All the rest methods are object methods.
+
+=head2 Object attribute: soundex_weight([set_val])
+
+Percentage of weight that soundex takes, the rest of percentage is for file size.
+
+Provide the C<set_val> to change the attribute, omitting it to retrieve the attribute value.
+
+=head2 Object attribute: fc_threshold([set_val])
+
+The threshold over which files are considered similar.
+
+Provide the C<set_val> to change the attribute, omitting it to retrieve the attribute value.
+
+=head2 Object attribute: delimiter([set_val])
+
+Delimiter printed between file info outputs.
+
+Provide the C<set_val> to change the attribute, omitting it to retrieve the attribute value.
+
+=head2 Object attribute: format([set_val])
+
+Format used to print file info.
+
+Provide the C<set_val> to change the attribute, omitting it to retrieve the attribute value.
+
+=head2 Object attribute: fc_level([set_val])
+
+File comparison level. Whether to check similar files within the same folder: 0, no; 1, yes.
+
+Provide the C<set_val> to change the attribute, omitting it to retrieve the attribute value.
+
+=head2 Object attribute: verbose([set_val])
+
+Verbose level. Whether to output progress info: 0, no; 1, yes.
+
+Provide the C<set_val> to change the attribute, omitting it to retrieve the attribute value.
+
+=cut
+
+File::Find::Similars
+    ->mk_accessors(qw(soundex_weight fc_threshold
+	delimiter format fc_level verbose));
+
+%config = 
+    (
+
+     soundex_weight => 50,	# percentage of weight that soundex takes,
+     				# the rest is for file size
+     fc_threshold => 75,	# over which files are considered similar
+     delimiter => "\n## =========\n",	# delimiter between files output
+     format => "%12d '%s' %s'%s'", # file info print format
+
+     fc_level => 0, 		# file comparison level
+     verbose => 0, 
+ );
+
+
 # =========================================================== &s-sub ===
-# S -  File::Find::Similars->init($fc_level, \@ARGV);
-# D -  initialize file comparing level and dir queue
-# 
-# T -  
-sub init ($\@) {
-    my ($mname, $_fc_level, $init_dirs) = @_;
-    $fc_level = $_fc_level;	# update module variable
-    #warn "] $mname, $fc_level, $init_dirs\n";
+
+sub new {
+    ref(my $class = shift)
+	and croak "new is a class method. class name needed.";
+    my ($arg_ref) = @_;
+    my $self = $class->SUPER::new({%config, %$arg_ref});
+    $config{soundex_weight} = $self->soundex_weight;
+    $config{fc_threshold} = $self->fc_threshold;
+    $config{delimiter} = $self->delimiter;
+    $config{format} = $self->format;
+    $config{fc_level} = $self->fc_level;
+    $config{verbose} = $self->verbose;
+    #$config{} = $self->;
+    return $self;
+}
+
+# =========================================================== &s-sub ===
+
+=head2 Object method: find_for($array_ref)
+
+Set directory queue for similarity checking. Each entry in C<$array_ref>
+is a directory to check into. E.g.,
+
+  $similars_finder->find_for(\@ARGV);
+
+=cut
+
+sub find_for {
+    my ($self, $init_dirs) = @_;
+
+    # threshold $config{fc_threshold}
+    print STDERR "Searching in directory(ies): @$init_dirs with level $config{fc_level}...\n\n"
+	if $config{verbose};
 
     @filequeue = @fileInfo = ();
     @filequeue = (@filequeue, map { [$_, ''] } @$init_dirs);
@@ -427,14 +530,23 @@ sub arrwash_lang($) {
     return @r;
 }
 
+=head2 Object method: similarity_check()
+
+Do similarity check on the queued directories.  Print similar files info on
+stdout according to the configured format and delimiters. E.g.,
+
+  $similars_finder->similarity_check();
+
+=cut
+
 # =========================================================== &s-sub ===
-# S -  similarity_check_name: similarity check on glabal array @fileInfo
-# U -  similarity_check_name();
+# S -  similarity_check: similarity check on glabal array @fileInfo
+# U -  similarity_check();
 #
 # I -  Input parameters: None
 # O -  similar files printed on stdout
 
-sub similarity_check_name {
+sub similarity_check {
 
     # get a ordered (by soundex count) file Info array
     # (Use short file names to compare to long file names)
@@ -453,12 +565,11 @@ sub similarity_check_name {
 	foreach my $jj (($ii+1) ..$#fileInfos) {
 	    $fnl=0;		# 0 is good enough since file at [ii] is 
 				# shorter in name than  the one at [jj]
-	    #warn "] jj=$jj\n";
 	    # don't care about same dir files?
 	    next 
-		if (!$fc_level && ($fileInfos[$ii]->[$N_dName] 
+		if (!$config{fc_level} && ($fileInfos[$ii]->[$N_dName] 
 		    eq $fileInfos[$jj]->[$N_dName])) ;
-	    if (file_diff(\@fileInfos, $ii, $jj) >= $config{Threshold}) {
+	    if (file_diff(\@fileInfos, $ii, $jj) >= $config{fc_threshold}) {
 		push @similar, [$ii, $jj, $fileInfos[$jj]->[$N_fSize] ];
 		$fnl= length($fileInfos[$jj]->[$N_fName]) if
 		    $fnl < length($fileInfos[$jj]->[$N_fName]);
@@ -469,7 +580,7 @@ sub similarity_check_name {
 	@similar = grep {!$saw[$_->[1]]}
 	  sort { $a->[2] <=> $b->[2] } @similar;
 	next unless @similar>1;
-	print $config{Deliminator};
+	print $config{delimiter};
 	foreach my $similar (@similar) {
 	    print file_info(\@fileInfos, $similar->[1], $fnl). "\n";
 	    $saw[$similar->[1]]++;
@@ -480,7 +591,7 @@ sub similarity_check_name {
 # =========================================================== &s-sub ===
 sub file_info ($$$) {
     my ($fileInfos, $ndx, $fnl) = @_;
-    return sprintf($config{Format}, $fileInfos->[$ndx]->[$N_fSize], 
+    return sprintf($config{format}, $fileInfos->[$ndx]->[$N_fSize], 
 		   $fileInfos->[$ndx]->[$N_fName],
 		   ' ' x ($fnl - length($fileInfos->[$ndx]->[$N_fName])),
 		   "$fileInfos->[$ndx]->[$N_dName]");
@@ -509,16 +620,16 @@ sub file_diff ($$$) {
 	grep $count{$_} > 1, keys %count;
     # return p * normal(\common soudex) + (1-p) * ( 1 - normal(\delta fSize))
     # so the bigger the return value is, the similar the two files are
-    $intersection *= $config{WeightSoundex} /
+    $intersection *= $config{soundex_weight} /
 	(@{$fileInfos->[$ndx1]->[$N_fSdxl]});
     dbg_show(100,"intersection", $intersection, $ndx1, $ndx2);
-    my $WeightfSzie = 100 - $config{WeightSoundex};
+    my $WeightfSzie = 100 - $config{soundex_weight};
     my $dfSize = abs($fileInfos->[$ndx1]->[$N_fSize] -
 		     $fileInfos->[$ndx2]->[$N_fSize]) * $WeightfSzie / 
 		($fileInfos->[$ndx1]->[$N_fSize] + 1);
     $dfSize = $dfSize > $WeightfSzie ? $WeightfSzie : $dfSize;
     my $file_diff = $intersection + ($WeightfSzie - $dfSize);
-    if ($file_diff >= $config{Threshold}) {
+    if ($file_diff >= $config{fc_threshold}) {
 	dbg_show(010,"file_diff",
 		 @{$fileInfos->[$ndx1]},
 		 @{$fileInfos->[$ndx2]},
@@ -535,9 +646,13 @@ __END__
 
 =head1 SEE ALSO
 
-File::Compare(3), perl(1) and the following scripts. 
+L<File::Compare>(3), L<perl>(1) and the following scripts. 
 
-## File::Find::Duplicates - Find duplicate files
+=over 4
+
+=item *
+
+File::Find::Duplicates - Find duplicate files
 
 http://belfast.pm.org/Modules/Duplicates.html
 
@@ -546,7 +661,9 @@ my %dupes = find_duplicate_files('/basedir1', '/basedir2');
 When passed a base directory (or list of such directories) it returns a hash,
 keyed on filesize, of lists of the identical files of that size.
 
-## ch::claudio::finddups - Find duplicate files in given directory
+=item *
+
+ch::claudio::finddups - Find duplicate files in given directory
 
 http://www.claudio.ch/Perl/finddups.html
 
@@ -563,12 +680,16 @@ indeed identical.
 Besides that it can be used as a package, and gives so access to the following
 variables, routines and methods.
 
-## dupper.pl - finds duplicate files, optionally removes them
+=item *
+
+dupper.pl - finds duplicate files, optionally removes them
 
 http://sial.org/code/perl/scripts/dupper.pl.html
 
 Script to find (and optionally remove) duplicate files in one or more
 directories. Duplicates are spotted though the use of MD5 checksums.
+
+=back
 
 
 =head1 BUGS

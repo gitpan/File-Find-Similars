@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                File-Find-Similars
-version:             2.00
+version:             2.04
 abstract:            Fast similar-files finder
 license:             BSD
 author:              

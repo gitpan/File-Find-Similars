@@ -1,9 +1,17 @@
-		       What's New in $Revision: 2.0 $
+		       What's New in $Revision: 2.1 $
 
 						$Author: tong $
 
  
 $Log: File-Find-Similars.news,v $
+Revision 2.1  2008/11/03 14:44:31  tong
+Release File::Find::Similars revision:2.4 to the public:
+- re-engine the module using the OO approach
+- expose class attributes that can be tweaked
+- amend the pod
+- use new test method and data
+- update the docs with the new test text
+
 Revision 2.0  2008/11/02 03:34:45  tong
 - change class name from File::Searcher::Similars to File::Find::Similars
 - change executable name from fileSimilars to file-similars

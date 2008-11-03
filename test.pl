@@ -2,7 +2,7 @@
 # -*- perl -*-
 
 # @Author: Tong SUN, (c)2001-2008, all right reserved
-# @Version: $Date: 2008/11/01 23:27:10 $ $Revision:  $
+# @Version: $Date: 2008/11/03 14:36:46 $ $Revision: 1.7 $
 # @HomeURL: http://xpt.sourceforge.net/
 
 # Before `make install' is performed this script should be runnable with
@@ -50,14 +50,14 @@ $result0="";
 # ======================================================= &test_case ===
 
 $result0="test/
-test/TestLayout.java
+test/Audio Book - The Grey Coloured Bunnie.mp3
 test/GNU - Python Standard Library (2001).rar
 test/PopupTest.java
-test/CardLayoutTest.java
 test/(eBook) GNU - Python Standard Library 2001.pdf
 test/Python Standard Library.zip
 test/GNU - 2001 - Python Standard Library.pdf
 test/LayoutTest.java
+test/ColoredGrayBunny.ogg
 ";
 $testid++;
 print "\n== Testing $testid, test.tgz file content:\n\n$result0";
@@ -69,13 +69,13 @@ ok($result1,$result0) || print $result1;
 $result1=dotest(2);
 
 $result0="  9 test/(eBook) GNU - Python Standard Library 2001.pdf
-  3 test/CardLayoutTest.java
+  3 test/Audio Book - The Grey Coloured Bunnie.mp3
+  5 test/ColoredGrayBunny.ogg
   5 test/GNU - 2001 - Python Standard Library.pdf
   4 test/GNU - Python Standard Library (2001).rar
   9 test/LayoutTest.java
   3 test/PopupTest.java
   2 test/Python Standard Library.zip
-  5 test/TestLayout.java
 ";
 $testid++;
 print "\n== Testing $testid, files under test/ subdir:\n\n$result0";
@@ -93,8 +93,8 @@ Note:
 
 $result0="
 ## =========
-           3 'CardLayoutTest.java' 'test/'
-           5 'TestLayout.java' 'test/'
+           3 'Audio Book - The Grey Coloured Bunnie.mp3' 'test/'
+           5 'ColoredGrayBunny.ogg'                      'test/'
 
 ## =========
            4 'GNU - Python Standard Library (2001).rar' 'test/'
@@ -108,10 +108,12 @@ print "
 Note:
 
 - There are 2 groups of similar files picked out by the script.
-  The second group makes more sense.
 - The similar files are picked because their file names look similar.
-- However, the file size plays an important role as well.
-- There are 2 files in the second similar files group.
+  Note that the first group looks different and spells differently too,
+  which means that the script is versatile enough to handle file names that
+  don't have space in it, and robust enough to deal with spelling mistakes.
+- Apart from the file name, the file size plays an important role as well.
+- There are 2 files in the second similar files group, the book files group.
 - The file 'Python Standard Library.zip' is not considered to be similar to
   the group because its size is not similar to the group.
 ";
@@ -120,13 +122,13 @@ Note:
 
 $result0="
 ## =========
-           3 'CardLayoutTest.java' 'test/'
-           5 'TestLayout.java' 'test/'
-
-## =========
            4 'Python Standard Library.zip' 'test/'
            4 'GNU - Python Standard Library (2001).rar' 'test/'
            5 'GNU - 2001 - Python Standard Library.pdf' 'test/'
+
+## =========
+           3 'Audio Book - The Grey Coloured Bunnie.mp3' 'test/'
+           5 'ColoredGrayBunny.ogg'                      'test/'
 ";
 $testid++;
 print "\n== Testing $testid, if Python.zip is bigger, result should be:\n$result0";
@@ -136,8 +138,10 @@ ok($result1,$result0) || print $result1;
 print "
 Note:
 
-- There are 3 files in the second similar files group.
-- The file 'Python Standard Library.zip' is now in the 2nd similar files
+- The previous second similar files group is now the first. I.e.,
+  the order of similar files groups is not important.
+- There are now 3 files in the book files group.
+- The file 'Python Standard Library.zip' is included in the
   group because its size is now similar to the group.
 ";
 
@@ -145,14 +149,14 @@ Note:
 
 $result0="
 ## =========
-           3 'CardLayoutTest.java' 'test/'
-           5 'TestLayout.java' 'test/'
+           4 'GNU - Python Standard Library (2001).rar' 'test/'
+           5 'GNU - 2001 - Python Standard Library.pdf' 'test/'
+           6 'Python Standard Library.zip' 'test/'
+           9 '(eBook) GNU - Python Standard Library 2001.pdf' 'test/'
 
 ## =========
-           4 'GNU - Python Standard Library (2001).rar'       'test/'
-           5 'GNU - 2001 - Python Standard Library.pdf'       'test/'
-           6 'Python Standard Library.zip'                    'test/'
-           9 '(eBook) GNU - Python Standard Library 2001.pdf' 'test/'
+           3 'Audio Book - The Grey Coloured Bunnie.mp3' 'test/'
+           5 'ColoredGrayBunny.ogg'                      'test/'
 ";
 $testid++;
 print "\n== Testing $testid, if Python.zip is even bigger, result should be:\n$result0";
@@ -162,13 +166,13 @@ ok($result1,$result0) || print $result1;
 print "
 Note:
 
-- There are 4 files in the second similar files group.
+- There are 4 files in the book files group now.
 - The file 'Python Standard Library.zip' is still in the group.
 - But this time, because it is also considered to be similar to the .pdf
-  file (since their size are now similar, 6 vs 9), a 4th file the .pdf
-  is now included in the 2nd group.
+  file (since their size are now similar, 6 vs 9), a 4th file the .pdf one
+  is now included in the book group.
 - If the size of file 'Python Standard Library.zip' is 12(KB), then the
-  second similar files group will be split into two. Do you know why and
+  book files group will be split into two. Do you know why and
   which files each group will contain?
 ";
 

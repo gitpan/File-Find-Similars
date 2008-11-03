@@ -6,6 +6,8 @@ README.html
 release-log.txt
 bin/file-similars
 lib/File/Find/Similars.pm
+t/00-load.t
+t/pod.t
 test.pl
 test.tgz
 META.yml                                 Module meta-data (added by MakeMaker)

@@ -455,25 +455,32 @@ would you expect from the outcome.</p></div>
 <div class="content">
 <pre><tt>$ make test
 PERL_DL_NONLAZY=1 /usr/bin/perl "-Iblib/lib" "-Iblib/arch" test.pl
-1..4 todo 1;
+1..5 todo 2;
 # Running under perl version 5.010000 for linux
-# Current time local: Fri Oct 31 12:31:40 2008
-# Current time GMT:   Fri Oct 31 16:31:40 2008
+# Current time local: Mon Nov  3 08:57:42 2008
+# Current time GMT:   Mon Nov  3 13:57:42 2008
 # Using Test.pm version 1.25
-# Testing File::Find::Similars version 1.27</tt></pre>
+# Testing File::Find::Similars version 2.03</tt></pre>
 </div></div>
-<h4 id="_testing_1_files_under_test_subdir">Testing 1, files under test/ subdir:</h4>
+<div class="olist"><ol>
+<li>
+<p>
+. .
+</p>
+</li>
+</ol></div>
+<h4 id="_testing_2_files_under_test_subdir">Testing 2, files under test/ subdir:</h4>
 <div class="literalblock">
 <div class="content">
 <pre><tt>  9 test/(eBook) GNU - Python Standard Library 2001.pdf
-  3 test/CardLayoutTest.java
+  3 test/Audio Book - The Grey Coloured Bunnie.mp3
+  5 test/ColoredGrayBunny.ogg
   5 test/GNU - 2001 - Python Standard Library.pdf
   4 test/GNU - Python Standard Library (2001).rar
   9 test/LayoutTest.java
   3 test/PopupTest.java
   2 test/Python Standard Library.zip
-  5 test/TestLayout.java
-ok 1 # (test.pl at line 55 TODO?!)</tt></pre>
+ok 2 # (test.pl at line 83 TODO?!)</tt></pre>
 </div></div>
 <div class="para"><p>Note:</p></div>
 <div class="ilist"><ul>
@@ -488,41 +495,43 @@ Let's assume that the number represent the file size in KB.
 </p>
 </li>
 </ul></div>
-<h4 id="_testing_2_result_should_be">Testing 2 result should be:</h4>
+<h4 id="_testing_3_result_should_be">Testing 3 result should be:</h4>
 <div class="literalblock">
 <div class="content">
 <pre><tt>## =========
-           3 'CardLayoutTest.java' 'test/'
-           5 'TestLayout.java' 'test/'</tt></pre>
+           3 'Audio Book - The Grey Coloured Bunnie.mp3' 'test/'
+           5 'ColoredGrayBunny.ogg'                      'test/'</tt></pre>
 </div></div>
 <div class="literalblock">
 <div class="content">
 <pre><tt>## =========
            4 'GNU - Python Standard Library (2001).rar' 'test/'
            5 'GNU - 2001 - Python Standard Library.pdf' 'test/'
-ok 2</tt></pre>
+ok 3</tt></pre>
 </div></div>
 <div class="para"><p>Note:</p></div>
 <div class="ilist"><ul>
 <li>
 <p>
 There are 2 groups of similar files picked out by the script.
-    The second group makes more sense.
 </p>
 </li>
 <li>
 <p>
 The similar files are picked because their file names look similar.
+    Note that the first group looks different and spells differently too,
+    which means that the script is versatile enough to handle file names that
+    don't have space in it, and robust enough to deal with spelling mistakes.
 </p>
 </li>
 <li>
 <p>
-However, the file size plays an important role as well.
+Apart from the file name, the file size plays an important role as well.
 </p>
 </li>
 <li>
 <p>
-There are 2 files in the second similar files group.
+There are 2 files in the second similar files group, the book files group.
 </p>
 </li>
 <li>
@@ -532,56 +541,62 @@ The file <em>Python Standard Library.zip</em> is not considered to be similar to
 </p>
 </li>
 </ul></div>
-<h4 id="_testing_3_if_python_zip_is_bigger_result_should_be">Testing 3, if Python.zip is bigger, result should be:</h4>
-<div class="literalblock">
-<div class="content">
-<pre><tt>## =========
-           3 'CardLayoutTest.java' 'test/'
-           5 'TestLayout.java' 'test/'</tt></pre>
-</div></div>
+<h4 id="_testing_4_if_python_zip_is_bigger_result_should_be">Testing 4, if Python.zip is bigger, result should be:</h4>
 <div class="literalblock">
 <div class="content">
 <pre><tt>## =========
            4 'Python Standard Library.zip' 'test/'
            4 'GNU - Python Standard Library (2001).rar' 'test/'
-           5 'GNU - 2001 - Python Standard Library.pdf' 'test/'
-ok 3</tt></pre>
-</div></div>
-<div class="para"><p>Note:</p></div>
-<div class="ilist"><ul>
-<li>
-<p>
-There are 3 files in the second similar files group.
-</p>
-</li>
-<li>
-<p>
-The file <em>Python Standard Library.zip</em> is now in the 2nd similar files
-    group because its size is now similar to the group.
-</p>
-</li>
-</ul></div>
-<h4 id="_testing_4_if_python_zip_is_even_bigger_result_should_be">Testing 4, if Python.zip is even bigger, result should be:</h4>
-<div class="literalblock">
-<div class="content">
-<pre><tt>## =========
-           3 'CardLayoutTest.java' 'test/'
-           5 'TestLayout.java' 'test/'</tt></pre>
+           5 'GNU - 2001 - Python Standard Library.pdf' 'test/'</tt></pre>
 </div></div>
 <div class="literalblock">
 <div class="content">
 <pre><tt>## =========
-           4 'GNU - Python Standard Library (2001).rar'       'test/'
-           5 'GNU - 2001 - Python Standard Library.pdf'       'test/'
-           6 'Python Standard Library.zip'                    'test/'
-           9 '(eBook) GNU - Python Standard Library 2001.pdf' 'test/'
+           3 'Audio Book - The Grey Coloured Bunnie.mp3' 'test/'
+           5 'ColoredGrayBunny.ogg'                      'test/'
 ok 4</tt></pre>
 </div></div>
 <div class="para"><p>Note:</p></div>
 <div class="ilist"><ul>
 <li>
 <p>
-There are 4 files in the second similar files group.
+The previous second similar files group is now the first. I.e.,
+    the order of similar files groups is not important.
+</p>
+</li>
+<li>
+<p>
+There are now 3 files in the book files group.
+</p>
+</li>
+<li>
+<p>
+The file <em>Python Standard Library.zip</em> is included in the
+    group because its size is now similar to the group.
+</p>
+</li>
+</ul></div>
+<h4 id="_testing_5_if_python_zip_is_even_bigger_result_should_be">Testing 5, if Python.zip is even bigger, result should be:</h4>
+<div class="literalblock">
+<div class="content">
+<pre><tt>## =========
+           4 'GNU - Python Standard Library (2001).rar' 'test/'
+           5 'GNU - 2001 - Python Standard Library.pdf' 'test/'
+           6 'Python Standard Library.zip' 'test/'
+           9 '(eBook) GNU - Python Standard Library 2001.pdf' 'test/'</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>## =========
+           3 'Audio Book - The Grey Coloured Bunnie.mp3' 'test/'
+           5 'ColoredGrayBunny.ogg'                      'test/'
+ok 5</tt></pre>
+</div></div>
+<div class="para"><p>Note:</p></div>
+<div class="ilist"><ul>
+<li>
+<p>
+There are 4 files in the book files group now.
 </p>
 </li>
 <li>
@@ -592,14 +607,14 @@ The file <em>Python Standard Library.zip</em> is still in the group.
 <li>
 <p>
 But this time, because it is also considered to be similar to the .pdf
-    file (since their size are now similar, 6 vs 9), a 4th file the .pdf
-    is now included in the 2nd group.
+    file (since their size are now similar, 6 vs 9), a 4th file the .pdf one
+    is now included in the book group.
 </p>
 </li>
 <li>
 <p>
 If the size of file <em>Python Standard Library.zip</em> is 12(KB), then the
-    second similar files group will be split into two. Do you know why and
+    book files group will be split into two. Do you know why and
     which files each group will contain?
 </p>
 </li>
@@ -615,8 +630,9 @@ make
 make test
 make install</tt></pre>
 </div></div>
-<div class="para"><p>There includes in the package a client program called file-similars.
-Copy it to a directory which is in the PATH.</p></div>
+<div class="para"><p>There includes in the package a client program called <em>file-similars</em>.
+It should have been copied to a directory which is in the PATH
+by <em>make install</em>.</p></div>
 <h3 id="_get_help">Get Help</h3><div style="clear:left"></div>
 <div class="para"><p>Issue <em>file-similars</em> to get help on how to use it. And also,</p></div>
 <div class="literalblock">
@@ -630,7 +646,7 @@ Copy it to a directory which is in the PATH.</p></div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2008-11-01 23:38:22 EDT
+Last updated 2008-11-03 09:23:39 EDT
 </div>
 </div>
 </body>

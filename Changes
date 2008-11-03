@@ -1,18 +1,44 @@
 
 RCS file: RCS/File-Find-Similars.pm,v
 Working file: File-Find-Similars.pm
-head: 2.0
+head: 2.4
 branch:
 locks: strict
-	tong: 2.0
+	tong: 2.4
 access list:
 symbolic names:
 keyword substitution: kv
-total revisions: 30;	selected revisions: 30
+total revisions: 34;	selected revisions: 34
 description:
 Possibly identical/similar file locator
 ----------------------------
-revision 2.0	locked by: tong;
+revision 2.4	locked by: tong;
+date: 2008/11/03 14:19:45;  author: tong;  state: Exp;  lines: +53 -41
+Amend the pod at many places:
+
+- update the SYNOPSIS section
+- update the ALGORITHM EXPLANATION section with the new test text
+- add the DEPENDS section
+- minor fix to the SEE ALSO section
+----------------------------
+revision 2.3
+date: 2008/11/03 03:18:22;  author: tong;  state: Exp;  lines: +62 -35
+- make it works.
+- add verbose attribute.
+- enhance pod at many places.
+----------------------------
+revision 2.2
+date: 2008/11/02 20:52:18;  author: tong;  state: Exp;  lines: +44 -30
+Batch renames:
+
+- class attributes
+- similarity_check_name to similarity_check
+----------------------------
+revision 2.1
+date: 2008/11/02 18:01:05;  author: tong;  state: Exp;  lines: +101 -33
+- first step making it using the OO approach.
+----------------------------
+revision 2.0
 date: 2008/11/02 01:24:55;  author: tong;  state: Exp;  lines: +2 -2
 - bump up version to 2.0
 ----------------------------

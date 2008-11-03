@@ -60,8 +60,10 @@ GetOptions(
     "level:i"	=> \$fc_level,
     ) || die;
 
-File::Find::Similars->init($fc_level, \@ARGV);
-similarity_check_name();
+my $similars_finder = 
+    File::Find::Similars->new( { fc_level => $fc_level, } ); # verbose => 1,
+$similars_finder->find_for(\@ARGV);
+$similars_finder->similarity_check();
 
 # {{{ POD:
 
