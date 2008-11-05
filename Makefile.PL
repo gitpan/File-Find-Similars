@@ -13,6 +13,9 @@ WriteMakefile(
     EXE_FILES		=> [ 'bin/file-similars' ],
     PL_FILES            => {},
     PREREQ_PM => {
+        'Class::Accessor::Fast' => 0,
+        'Getopt::Long' => 0,
+        'Pod::Usage' => 0,
         'Test::More' => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
